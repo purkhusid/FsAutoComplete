@@ -2,15 +2,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>netcoreapp2.1;net461</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.1</TargetFrameworks>
     <AssemblyName>fsautocomplete</AssemblyName>
     <ServerGarbageCollection>true</ServerGarbageCollection>
     <ConcurrentGarbageCollection>true</ConcurrentGarbageCollection>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'net461' ">
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <Prefer32Bit>false</Prefer32Bit>
-    <Platform>x64</Platform>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Options.fs" />
@@ -34,7 +29,6 @@
 
   </ItemGroup>
 
-  <!-- do not bundle the net461 exe inside the .net core tool package -->
   <PropertyGroup Condition=" '$(PackAsTool)' == 'true' ">
     <TargetFrameworks></TargetFrameworks>
     <TargetFramework>netcoreapp2.1</TargetFramework>

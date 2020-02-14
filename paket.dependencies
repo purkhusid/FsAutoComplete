@@ -1,6 +1,6 @@
 version 5.241.6
 
-framework: net461, netstandard2.0, netcoreapp2.1
+framework: netstandard2.0, netcoreapp2.1
 source https://api.nuget.org/v3/index.json
 source ./lib
 storage: none
@@ -21,7 +21,6 @@ nuget Fake.Runtime prerelease
 nuget FSharpLint.Core ~> 0.12.3 prerelease
 nuget FSharp.Core redirects:force
 nuget OptimizedPriorityQueue
-nuget System.ValueTuple redirects:force, condition:net461 // workaround for older version of net framework..
 nuget Dapper
 nuget Microsoft.Data.Sqlite 2.2.4
 nuget Microsoft.Data.Sqlite.Core 2.2.4
@@ -58,7 +57,7 @@ group Build
   nuget Microsoft.Build
 
 group Test
-  framework: net461, netstandard2.0, netcoreapp2.0, netcoreapp2.1, netcoreapp3.1
+  framework: netstandard2.0, netcoreapp2.0, netcoreapp2.1, netcoreapp3.1
   source https://api.nuget.org/v3/index.json
   storage: none
 
@@ -66,18 +65,6 @@ group Test
   nuget NUnit3TestAdapter 3.10.0
   nuget Microsoft.NET.Test.Sdk 15.8.0
   nuget Expecto
-
-group IntegrationTests
-  framework: net461
-  source https://api.nuget.org/v3/index.json
-  generate_load_scripts: true
-
-  nuget Http.fs
-  nuget Newtonsoft.Json 11.0.2
-  nuget System.Net.WebSockets.Client
-  nuget Hopac
-  nuget FSharp.Core ~> 4.5
-  nuget Argu ~> 5.2.0
 
 group SourceLink
   storage: none

@@ -1,4 +1,3 @@
-System.ValueTuple condition:net461
 FSharp.Compiler.Service
 Argu
 Newtonsoft.Json
