@@ -69,8 +69,13 @@ type FsharpLspServer(commands: Commands, lspClient: FSharpLspClient) =
     let updateConfig (newConfig: FSharpConfig) =
         let toCompilerToolArgument (path: string) = sprintf "--compilertool:%s" path
         config <- newConfig
+
+        let compilerArgs = [| yield! config.FSICompilerToolLocations |> Array.map toCompilerToolArgument; yield! config.FSIExtraParameters |]
+
+        logger.info (Log.setMessage "Updating server configs to {config}" >> Log.addContext "config" {| dotnetRoot = config.DotNetRoot; fsiArgs = compilerArgs; linterPath = config.LinterConfig; analyzerPath = config.AnalyzersPath |})
+
         commands.SetDotnetSDKRoot config.DotNetRoot
-        commands.SetFSIAdditionalArguments [| yield! config.FSICompilerToolLocations |> Array.map toCompilerToolArgument; yield! config.FSIExtraParameters |]
+        commands.SetFSIAdditionalArguments compilerArgs
         commands.SetLinterConfigRelativePath config.LinterConfig
         match config.AnalyzersPath with
         | [||] ->
@@ -1610,14 +1615,12 @@ type FsharpLspServer(commands: Commands, lspClient: FSharpLspClient) =
     }
 
     override __.WorkspaceDidChangeConfiguration(p: DidChangeConfigurationParams) = async {
-        logger.info (Log.setMessage "WorkspaceDidChangeConfiguration Request: {parms}" >> Log.addContextDestructured "parms" p )
-
         let dto =
             p.Settings
             |> Server.deserialize<FSharpConfigRequest>
         let c = config.AddDto dto.FSharp
         updateConfig c
-        logger.info (Log.setMessage "Workspace configuration changed" >> Log.addContextDestructured "config" c)
+        logger.info (Log.setMessage "Workspace configuration changed {config}" >> Log.addContextDestructured "config" c)
         return ()
     }
 

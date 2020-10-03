@@ -304,6 +304,13 @@ type FSharpCompilerServiceChecker(backgroundServiceEnabled) =
   member internal __.GetFSharpChecker() = checker
 
   member __.SetDotnetRoot(path) =
+    let ensureIsDirectory (path: string) =
+      let attrs = System.IO.File.GetAttributes(path)
+      if attrs.HasFlag(System.IO.FileAttributes.Directory)
+      then path
+      else System.IO.Path.GetDirectoryName path
+
+    let path = ensureIsDirectory path
     if sdkRoot = Some path
     then ()
     else
