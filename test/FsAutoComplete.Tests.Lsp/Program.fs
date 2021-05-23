@@ -110,6 +110,6 @@ let main args =
   let config =
     { defaultConfig
       with runInParallel = false
-          //  failOnFocusedTests = true
+           failOnFocusedTests = true
            printer = Expecto.Impl.TestPrinters.summaryPrinter defaultConfig.printer }
   runTestsWithArgsAndCancel cts.Token config args tests
